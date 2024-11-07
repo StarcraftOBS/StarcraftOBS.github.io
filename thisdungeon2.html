@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>이 빌어먹을 던전2(신수) v1.17 DB</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    .filter-section {
+        margin-bottom: 20px;
+    }
+    .filter-section h2 {
+        margin-bottom: 10px;
+    }
+    .filter-section button {
+        margin: 5px;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        background-color: #f2f2f2;
+        cursor: pointer;
+    }
+    .filter-section button.active {
+        background-color: #4285F4;
+        color: white;
+        border-color: #357AE8;
+    }
+    .item-list {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .item {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin: 10px;
+        width: calc(33% - 40px);
+        box-sizing: border-box;
+    }
+    .item h3 {
+        margin-top: 0;
+    }
+    .hidden {
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<h1><a href="https://cafe.naver.com/edac/132880" target="_blank">이빌던 DB</a></h1>
+
+<!-- 속성 필터 -->
+<div class="filter-section">
+    <h2>속성 필터</h2>
+    <div id="attribute-filters">
+        <!-- 속성 버튼들이 여기 생성됩니다 -->
+    </div>
+</div>
+
+<!-- 등급 필터 -->
+<div class="filter-section">
+    <h2>등급 필터</h2>
+    <div id="grade-filters">
+        <!-- 등급 버튼들이 여기 생성됩니다 -->
+    </div>
+</div>
+
+<!-- 종류 필터 -->
+<div class="filter-section">
+    <h2>종류 필터</h2>
+    <div id="type-filters">
+    </div>
+</div>
+
+<!-- 능력 키워드 필터 -->
+<div class="filter-section">
+    <h2>능력 키워드 필터</h2>
+    <div id="keyword-filters">
+        <!-- 키워드 버튼들이 여기 생성됩니다 -->
+    </div>
+</div>
+
+<!-- 아이템 목록 -->
+<div class="item-list" id="item-list">
+    <!-- 아이템들이 여기 생성됩니다 -->
+</div>
+
+<script>
+// 아이템 데이터
+const items = [
+    // 1. 희귀
+    {
+        name: "도굴꾼의삽",
+        type: "아티팩트",
+        attributes: ["강철", "망자"],
+        grade: "희귀",
+        ability: "방어력+3 체력+50",
+        extra: ""
+    },
+    {
+        name: "반딧불망토",
+        type: "코어",
+        attributes: ["번개", "기계"],
+        grade: "희귀",
+        ability: "실드재생+20",
+        extra: ""
+    },
+    {
+        name: "고드름송",
+        type: "아티팩트",
+        attributes: ["냉기", "마물"],
+        grade: "희귀",
+        ability: "주문력+4",
+        extra: ""
+    },
+    {
+        name: "화염정령석",
+        type: "아티팩트",
+        attributes: ["화염", "정령"],
+        grade: "희귀",
+        ability: "공격력+4",
+        extra: ""
+    },
+    {
+        name: "선풍기",
+        type: "아티팩트",
+        attributes: ["바람", "기계"],
+        grade: "희귀",
+        ability: "공격속도+15 평타공격력+10%",
+        extra: ""
+    },
+    {
+        name: "오목눈이새",
+        type: "아티팩트",
+        attributes: ["광휘", "제국"],
+        grade: "희귀",
+        ability: "실드&체력+50",
+        extra: ""
+    },
+    {
+        name: "빨간페도라",
+        type: "아티팩트",
+        attributes: ["화염", "천사"],
+        grade: "희귀",
+        ability: "공격력+10%",
+        extra: ""
+    },
+    {
+        name: "돌격소총",
+        type: "코어",
+        attributes: ["바람", "마물"],
+        grade: "희귀",
+        ability: "평타공격력+50% 공격속도+20 사거리+2",
+        extra: ""
+    },
+    {
+        name: "뼈몽둥이",
+        type: "아티팩트",
+        attributes: ["대지", "망자"],
+        grade: "희귀",
+        ability: "공격력+2 방어력+3",
+        extra: ""
+    },
+    // 2. 영웅
+    {
+        name: "식탐의죄악",
+        type: "코어",
+        attributes: ["강철", "기계"],
+        grade: "영웅",
+        ability: "체력+300",
+        extra: "보유한 소비 아이템 1개당 피해량 3% 증가"
+    },
+    {
+        name: "색정의죄악",
+        type: "코어",
+        attributes: ["바람", "제국"],
+        grade: "영웅",
+        ability: "체력+100 회복력+100%",
+        extra: "회복력의 25%만큼 피해량 증가"
+    },
+    {
+        name: "질투의죄악",
+        type: "코어",
+        attributes: ["냉기", "악마"],
+        grade: "영웅",
+        ability: "실드+150 실드방어력+2",
+        extra: "실드 100당 피해량3% 증가"
+    },
+    {
+        name: "오만의죄악",
+        type: "코어",
+        attributes: ["광휘", "망자"],
+        grade: "영웅",
+        ability: "체력+100 방어력+12",
+        extra: "방어력만큼 피해량 증가"
+    },
+    {
+        name: "탐욕의죄악",
+        type: "코어",
+        attributes: ["강철", "기계"],
+        grade: "영웅",
+        ability: "공격력&주문력+6",
+        extra: "보유한 골드(100골드마다) 공격력과 주문력+1 (최대 50)"
+    },
+    {
+        name: "분노의죄악",
+        type: "코어",
+        attributes: ["화염", "마물"],
+        grade: "영웅",
+        ability: "사거리+2 공격속도+30%",
+        extra: "공격속도만큼 피해량 증가"
+    },
+    {
+        name: "나태의죄악",
+        type: "코어",
+        attributes: ["대지", "기계"],
+        grade: "영웅",
+        ability: "공격력&주문력+4 쿨타임감소+20%",
+        extra: "쿨타임 감소 수치만큼 피해량 증가"
+    },
+    {
+        name: "가시방패검",
+        type: "코어",
+        attributes: ["대지", "마물"],
+        grade: "영웅",
+        ability: "방어력+15",
+        extra: "방어력의 절반만큼 공격력 증가"
+    },
+    {
+        name: "광전사의혼",
+        type: "코어",
+        attributes: ["화염", "악마"],
+        grade: "영웅",
+        ability: "체력+300",
+        extra: "체력 50% 이하면 방어력, 공격력 100% 증가"
+    },
+    {
+        name: "갈기바람",
+        type: "코어",
+        attributes: ["바람", "이계"],
+        grade: "영웅",
+        ability: "주문력+8 쿨타임감소+30%",
+        extra: ""
+    },
+    {
+        name: "용왕의갑옷",
+        type: "코어",
+        attributes: ["냉기", "정령"],
+        grade: "영웅",
+        ability: "방어력+18",
+        extra: "방어력의 절반만큼 실드방어력 증가"
+    },
+    {
+        name: "고철파수꾼",
+        type: "코어",
+        attributes: ["강철", "망자"],
+        grade: "영웅",
+        ability: "공격력&방어력+6",
+        extra: "장비한 일반, 희귀 등급 아티팩트당 피해량 30% 증가"
+    },
+    {
+        name: "마법전기톱",
+        type: "코어",
+        attributes: ["번개", "마물"],
+        grade: "영웅",
+        ability: "마나+150",
+        extra: "마나재생 1당 12%의 피해량 얻음"
+    },
+    {
+        name: "별무리",
+        type: "코어",
+        attributes: ["번개", "천사"],
+        grade: "영웅",
+        ability: "공격속도+45 사거리+4",
+        extra: "공격속도 10%당 공격력 1증가"
+    },
+    {
+        name: "만능곡괭이",
+        type: "코어",
+        attributes: ["대지", "기계"],
+        grade: "영웅",
+        ability: "실드+150",
+        extra: "방어력 1당 2%의 스킬피해량 얻음"
+    },
+    {
+        name: "불타는해골",
+        type: "아티팩트",
+        attributes: ["화염", "마물"],
+        grade: "영웅",
+        ability: "피해량+20%",
+        extra: ""
+    },
+    {
+        name: "성휘의날개",
+        type: "아티팩트",
+        attributes: ["바람", "천사"],
+        grade: "영웅",
+        ability: "실드+100",
+        extra: ""
+    },
+    {
+        name: "거인의심장",
+        type: "아티팩트",
+        attributes: ["강철", "마물"],
+        grade: "영웅",
+        ability: "체력+200",
+        extra: ""
+    },
+    {
+        name: "예언서",
+        type: "아티팩트",
+        attributes: ["화염", "망자"],
+        grade: "영웅",
+        ability: "영혼력+200 신수체력+50%",
+        extra: ""
+    },
+    {
+        name: "해골골렘",
+        type: "아티팩트",
+        attributes: ["대지", "망자"],
+        grade: "영웅",
+        ability: "체력+100",
+        extra: ""
+    },
+    {
+        name: "골렘의태엽",
+        type: "아티팩트",
+        attributes: ["강철", "마물"],
+        grade: "영웅",
+        ability: "스킬피해량+20% 방어력+6",
+        extra: ""
+    },
+    {
+        name: "이별의눈물",
+        type: "아티팩트",
+        attributes: ["냉기", "악마"],
+        grade: "영웅",
+        ability: "스킬피해량+40%",
+        extra: ""
+    },
+    {
+        name: "아이스크림",
+        type: "아티팩트",
+        attributes: ["냉기", "기계"],
+        grade: "영웅",
+        ability: "마나+40 마나재생+2",
+        extra: ""
+    },
+    {
+        name: "신비한램프",
+        type: "아티팩트",
+        attributes: ["바람", "정령"],
+        grade: "영웅",
+        ability: "주문력+4 쿨타임감소+20%",
+        extra: ""
+    },
+    {
+        name: "요새수호자",
+        type: "아티팩트",
+        attributes: ["대지", "제국"],
+        grade: "영웅",
+        ability: "실드+75 실드재생+5",
+        extra: ""
+    },
+    {
+        name: "반짝이는뱀",
+        type: "아티팩트",
+        attributes: ["광휘", "마물"],
+        grade: "영웅",
+        ability: "실드재생+16",
+        extra: ""
+    },
+    {
+        name: "유니콘의뿔",
+        type: "아티팩트",
+        attributes: ["번개", "이계"],
+        grade: "영웅",
+        ability: "공격력+8",
+        extra: ""
+    },
+    {
+        name: "차가운톱날",
+        type: "아티팩트",
+        attributes: ["냉기", "기계"],
+        grade: "영웅",
+        ability: "주문력+4 공격속도+30",
+        extra: ""
+    },
+    {
+        name: "망각의망토",
+        type: "아티팩트",
+        attributes: ["바람", "망자"],
+        grade: "영웅",
+        ability: "공격속도+40 실드+50",
+        extra: ""
+    },
+    {
+        name: "명계이음줄",
+        type: "아티팩트",
+        attributes: ["어둠", "천사"],
+        grade: "영웅",
+        ability: "사거리+4",
+        extra: ""
+    },
+    {
+        name: "계시록",
+        type: "아티팩트",
+        attributes: ["광휘", "악마"],
+        grade: "영웅",
+        ability: "스킬피해량+20% 체력+100",
+        extra: ""
+    },
+    {
+        name: "여명의랜턴",
+        type: "아티팩트",
+        attributes: ["번개", "제국"],
+        grade: "영웅",
+        ability: "공격력+10% 마나재생+2",
+        extra: ""
+    },
+    {
+        name: "장로의반지",
+        type: "아티팩트",
+        attributes: ["대지", "이계"],
+        grade: "영웅",
+        ability: "방어력+6 체력+100",
+        extra: ""
+    },
+    {
+        name: "나락손아귀",
+        type: "아티팩트",
+        attributes: ["어둠", "천사"],
+        grade: "영웅",
+        ability: "공격력+6 영혼력+150",
+        extra: ""
+    },
+    {
+        name: "용암망치",
+        type: "아티팩트",
+        attributes: ["화염", "정령"],
+        grade: "영웅",
+        ability: "주문력+6 체력+50",
+        extra: ""
+    },
+    {
+        name: "강철의수라",
+        type: "아티팩트",
+        attributes: ["강철", "악마"],
+        grade: "영웅",
+        ability: "실드방어력&방어력+6",
+        extra: ""
+    },
+    {
+        name: "급속충전기",
+        type: "아티팩트",
+        attributes: ["번개", "기계"],
+        grade: "영웅",
+        ability: "마나재생+4",
+        extra: ""
+    },
+    // 3. 전설
+    {
+        name: "여신의방패",
+        type: "코어",
+        attributes: ["광휘", "천사"],
+        grade: "전설",
+        ability: "체력+150 방어력+15",
+        extra: "매초 영웅 주변 50(+10*방어력) 피해"
+    },
+    {
+        name: "실드성애자",
+        type: "코어",
+        attributes: ["냉기", "마물"],
+        grade: "전설",
+        ability: "실드방어력+12 실드재생+20",
+        extra: "체력이 모두 실드로 전환"
+    },
+    {
+        name: "뇌신의망치",
+        type: "코어",
+        attributes: ["번개", "기계"],
+        grade: "전설",
+        ability: "공격력&주문력+6 체력+100",
+        extra: "Q스킬 번개 피해"
+    },
+    {
+        name: "황제의대검",
+        type: "코어",
+        attributes: ["어둠", "제국"],
+        grade: "전설",
+        ability: "공격력&주문력+10",
+        extra: "피해량의 2배만큼 실드 획복"
+    },
+    {
+        name: "광휘정령석",
+        type: "코어",
+        attributes: ["광휘", "정령"],
+        grade: "전설",
+        ability: "실드+300",
+        extra: "실드 50당 주문력 1 증가"
+    },
+    {
+        name: "가브리오랠",
+        type: "코어",
+        attributes: ["냉기", "천사"],
+        grade: "전설",
+        ability: "주문력+15",
+        extra: "냉기 시너지 하나당 피해량 30% 증가"
+    },
+    {
+        name: "채굴용드릴",
+        type: "코어",
+        attributes: ["강철", "악마"],
+        grade: "전설",
+        ability: "공격속도+50 피해량+25%",
+        extra: "주변 적 실드 제거"
+    },
+    {
+        name: "디아블로스",
+        type: "코어",
+        attributes: ["화염", "악마"],
+        grade: "전설",
+        ability: "공격력+15",
+        extra: "화염 시너지 하나당 피해량 30% 증가"
+    },
+    {
+        name: "태풍의사도",
+        type: "아티팩트",
+        attributes: ["바람", "기계"],
+        grade: "전설",
+        ability: "공격속도+60",
+        extra: "초과 공격속도만큼 평타피해량 증가"
+    },
+    {
+        name: "끝없는심판",
+        type: "아티팩트",
+        attributes: ["화염", "망자"],
+        grade: "전설",
+        ability: "영혼력+100 체력재생+20 피해량+20%",
+        extra: ""
+    },
+    {
+        name: "대두수호자",
+        type: "아티팩트",
+        attributes: ["어둠", "제국"],
+        grade: "전설",
+        ability: "공격력&주문력+10",
+        extra: "피해량의 2배만큼 실드 획복"
+    },
+    {
+        name: "폭풍의마안",
+        type: "아티팩트",
+        attributes: ["바람", "기계"],
+        grade: "전설",
+        ability: "사거리+2 공격력+6",
+        extra: "사거리 1당 5%의 피해량 얻음"
+    },
+    {
+        name: "박쥐의숨결",
+        type: "아티팩트",
+        attributes: ["번개", "악마"],
+        grade: "전설",
+        ability: "스킬피해량+30%",
+        extra: ""
+    },
+    {
+        name: "천벌",
+        type: "아티팩트",
+        attributes: ["번개", "천사"],
+        grade: "전설",
+        ability: "평타피해량+50%",
+        extra: "공격속도 5당 공격력 1증가"
+    },
+    {
+        name: "암흑징수꾼",
+        type: "아티팩트",
+        attributes: ["어둠", "제국"],
+        grade: "전설",
+        ability: "실드+100 마나+40",
+        extra: "마나재생만큼 실드재생 증가"
+    },
+    {
+        name: "마왕호소인",
+        type: "아티팩트",
+        attributes: ["어둠", "마물"],
+        grade: "전설",
+        ability: "체력+150 피해량+15%",
+        extra: ""
+    },
+    {
+        name: "태양의사도",
+        type: "아티팩트",
+        attributes: ["광휘", "마물"],
+        grade: "전설",
+        ability: "회복력+60% 쿨타임감소+30%",
+        extra: ""
+    },
+    {
+        name: "자두맛캔디",
+        type: "아티팩트",
+        attributes: ["냉기", "정령"],
+        grade: "전설",
+        ability: "실드+100 주문력+7",
+        extra: ""
+    },
+    {
+        name: "보라슬라임",
+        type: "아티팩트",
+        attributes: ["대지", "천사"],
+        grade: "전설",
+        ability: "체력+200 체력재생+8",
+        extra: ""
+    },
+    {
+        name: "햄버거모자",
+        type: "아티팩트",
+        attributes: ["광휘", "망자"],
+        grade: "전설",
+        ability: "영혼재생&실드재생+20",
+        extra: ""
+    },
+    {
+        name: "보물도깨비",
+        type: "아티팩트",
+        attributes: ["강철", "정령"],
+        grade: "전설",
+        ability: "방어력+10",
+        extra: "보유한 골드 절반만큼 추가 실드 (최대1000)"
+    },
+    {
+        name: "얼음광전사",
+        type: "아티팩트",
+        attributes: ["냉기", "악마"],
+        grade: "전설",
+        ability: "주문력+12",
+        extra: ""
+    },
+    {
+        name: "드워프의소총",
+        type: "아티팩트",
+        attributes: ["화염", "기계"],
+        grade: "전설",
+        ability: "사거리+6 피해량+10%",
+        extra: ""
+    },
+    // 4. 신화
+    {
+        name: "위그드라실",
+        type: "코어",
+        attributes: ["대지", "정령"],
+        grade: "신화",
+        ability: "체력+600 체력재생+40 회복력+100%",
+        extra: "주변 아군 방어력 10 증가"
+    },
+    {
+        name: "템피스트",
+        type: "코어",
+        attributes: ["바람", "정령"],
+        grade: "신화",
+        ability: "공격속도+80% 쿨타임감소+30% 실드+200",
+        extra: ""
+    },
+    {
+        name: "운명",
+        type: "코어",
+        attributes: ["광휘", "마물"],
+        grade: "신화",
+        ability: "공격력+20 실드+300 실드재생+20",
+        extra: "Q스킬 사용시 마우스 방향 400(+50*공격력) 피해"
+    },
+    {
+        name: "아스트라페",
+        type: "코어",
+        attributes: ["번개", "제국"],
+        grade: "신화",
+        ability: "마나재생+10",
+        extra: "Q스킬 사용시 마나 50추가 지불하여 마우스 방향 벼락"
+    },
+    {
+        name: "마왕의심장",
+        type: "코어",
+        attributes: ["어둠", "악마"],
+        grade: "신화",
+        ability: "주문력+20 마나+300 마나재생+4",
+        extra: "스킬 사용 시 모든 스킬 쿨타임 1초 감소"
+    },
+    {
+        name: "현무의껍질",
+        type: "아티팩트",
+        attributes: ["대지", "정령"],
+        grade: "신화",
+        ability: "방어력+50%",
+        extra: ""
+    },
+    {
+        name: "여의봉",
+        type: "아티팩트",
+        attributes: ["대지", "망자"],
+        grade: "신화",
+        ability: "사거리+4 피해량+25% 체력+200",
+        extra: ""
+    },
+    {
+        name: "프리가라흐",
+        type: "아티팩트",
+        attributes: ["바람", "기계"],
+        grade: "신화",
+        ability: "공격력+15% 평타피해량+25%",
+        extra: ""
+    },
+    {
+        name: "영혼분쇄기",
+        type: "아티팩트",
+        attributes: ["어둠", "기계"],
+        grade: "신화",
+        ability: "영혼력+400",
+        extra: "신수의 체력과 공격력이 2배"
+    },
+    {
+        name: "전쟁망치",
+        type: "아티팩트",
+        attributes: ["광휘", "제국"],
+        grade: "신화",
+        ability: "공격력+10 체력+200",
+        extra: "주변 적 3초마다 1000 데미지"
+    },
+    {
+        name: "인페르니아",
+        type: "아티팩트",
+        attributes: ["어둠", "악마"],
+        grade: "신화",
+        ability: "공격력+22",
+        extra: "저편 악마 소환, 악마 4시너지 시 강화"
+    },
+    {
+        name: "주작의깃털",
+        type: "아티팩트",
+        attributes: ["화염", "정령"],
+        grade: "신화",
+        ability: "공격력+30%",
+        extra: ""
+    },
+    {
+        name: "청룡의구술",
+        type: "아티팩트",
+        attributes: ["냉기", "정령"],
+        grade: "신화",
+        ability: "주문력+30%",
+        extra: ""
+    },
+    {
+        name: "지옥추방자",
+        type: "아티팩트",
+        attributes: ["번개", "망자"],
+        grade: "신화",
+        ability: "실드+250",
+        extra: "90초에 한번 실드가 0이되면 5초간 무적후 재생"
+    },
+    {
+        name: "칼라드볼그",
+        type: "아티팩트",
+        attributes: ["화염", "제국"],
+        grade: "신화",
+        ability: "공격력+20",
+        extra: ""
+    },
+    {
+        name: "역설",
+        type: "아티팩트",
+        attributes: ["강철", "이계"],
+        grade: "신화",
+        ability: "주문력+10 방어력+15",
+        extra: "5초마다 1초씩 무적"
+    },
+    // 5. 저주
+    {
+        name: "지옥불장검",
+        type: "코어",
+        attributes: ["화염", "이계"],
+        grade: "저주",
+        ability: "공격력+12",
+        extra: "회복력 100% 감소 대신 공격력 30% 증가"
+    },
+    {
+        name: "네크로미콘",
+        type: "코어",
+        attributes: ["어둠", "망자"],
+        grade: "저주",
+        ability: "주문력+12",
+        extra: "스킬을 사용할 때마다 체력 5% 감소 (대신 주문력 30% 증가)"
+    },
+    {
+        name: "헤일로",
+        type: "코어",
+        attributes: ["광휘", "천사"],
+        grade: "저주",
+        ability: "실드+200",
+        extra: "실드방어력과 방어력이 0이 되는 대신 피해량 75% 증가"
+    },
+    {
+        name: "악마의왕관",
+        type: "코어",
+        attributes: ["번개", "악마"],
+        grade: "저주",
+        ability: "마나+160",
+        extra: "마나소비량 50% 증가하는 대신 스킬 피해량 100% 증가"
+    },
+    {
+        name: "염라",
+        type: "아티팩트",
+        attributes: ["번개", "악마"],
+        grade: "저주",
+        ability: "피해량+150%",
+        extra: "최대마나-50%"
+    },
+    {
+        name: "아이기스",
+        type: "아티팩트",
+        attributes: ["대지", "정령"],
+        grade: "저주",
+        ability: "실드+100 실드재생+20 실드방어력+20",
+        extra: "초마다 마나 5소비해야 실드가 유지"
+    },
+    {
+        name: "천상의태엽",
+        type: "아티팩트",
+        attributes: ["광휘", "기계"],
+        grade: "저주",
+        ability: "주문력+22 체력+200",
+        extra: "스킬쿨타임 2배"
+    },
+    {
+        name: "라그나로크",
+        type: "아티팩트",
+        attributes: ["강철", "마물"],
+        grade: "저주",
+        ability: "체력+200 피해량+75%",
+        extra: "전투 종료 시 체력 1됨"
+    },
+    {
+        name: "현자의돌",
+        type: "아티팩트",
+        attributes: ["어둠", "정령"],
+        grade: "저주",
+        ability: "피해량+100%",
+        extra: "전투 종료 시 100골드 지불안하면 파괴"
+    },
+    {
+        name: "재앙부르미",
+        type: "아티팩트",
+        attributes: ["바람", "악마"],
+        grade: "저주",
+        ability: "체력&실드&영혼재생+20 회복력+100%",
+        extra: "12초마다 재앙의 괴물(히드라) 소환"
+    },
+    {
+        name: "태양불지기",
+        type: "아티팩트",
+        attributes: ["화염", "천사"],
+        grade: "저주",
+        ability: "체력+600",
+        extra: "전투 중 초당 체력이 1%씩 감소"
+    },
+    {
+        name: "혹한의노래",
+        type: "아티팩트",
+        attributes: ["냉기", "망자"],
+        grade: "저주",
+        ability: "공격력&주문력&방어력+15",
+        extra: "실드가 0이 됨"
+    },
+    {
+        name: "도깨비감투",
+        type: "아티팩트",
+        attributes: ["광휘", "기계"],
+        grade: "저주",
+        ability: "실드+300 실드재생+10 쿨타임감소+40%",
+        extra: "평타 공격력이 10으로 고정"
+    },
+    {
+        name: "뒤엉킨사슬",
+        type: "아티팩트",
+        attributes: ["어둠", "이계"],
+        grade: "저주",
+        ability: "피해량+100%",
+        extra: "초마다 마나 1% 감소"
+    },
+    {
+        name: "이단심판자",
+        type: "아티팩트",
+        attributes: ["대지", "기계"],
+        grade: "저주",
+        ability: "공격력+16",
+        extra: "소비아이템 사용 불가"
+    },
+    {
+        name: "뒤틀린미소",
+        type: "아티팩트",
+        attributes: ["강철", "천사"],
+        grade: "저주",
+        ability: "방어력+20 체력+400",
+        extra: "스킬 피해량 절반 감소"
+    }
+];
+
+// 속성 목록
+const attributes = [
+    "화염", "냉기", "바람", "대지", "강철", "번개",
+    "어둠", "광휘", "제국", "정령", "이계", "마물",
+    "망자", "기계", "악마", "천사"
+];
+
+// 등급 목록
+const grades = ["희귀", "영웅", "전설", "신화", "저주"];
+
+// 능력 키워드 목록
+const keywords = [
+    "공격력","주문력", "방어력","체력", "체력재생", "실드", "실드재생", "실드방어력",
+    "마나", "마나재생", "최대마나", "마나소비량", "공격속도", "평타공격력", "평타피해량", "쿨타임감소", "쿨타임", "스킬쿨타임",
+    "피해량", "스킬피해량", "영혼력", "영혼재생", "사거리", "회복력", "무적", "골드", "소비아이템", "파괴", "주변 적",
+    "스킬", "신수체력", "신수공격력", "초당", "전투 종료 시", "재생"
+];
+
+// 필터 상태
+let selectedAttributes = [];
+let selectedGrades = [];
+let selectedTypes = [];
+let selectedKeywords = [];
+
+// 필터 버튼 생성 함수
+function createFilterButtons(list, containerId, filterArray, dataAttribute) {
+    const container = document.getElementById(containerId);
+    list.forEach(item => {
+        const button = document.createElement('button');
+        button.innerText = item;
+        button.dataset[dataAttribute] = item;
+        button.addEventListener('click', () => {
+            if (filterArray.includes(item)) {
+                filterArray.splice(filterArray.indexOf(item), 1);
+                button.classList.remove('active');
+            } else {
+                filterArray.push(item);
+                button.classList.add('active');
+            }
+            filterItems();
+        });
+        container.appendChild(button);
+    });
+}
+
+// 아이템 렌더링 함수
+function renderItems(items) {
+    const container = document.getElementById('item-list');
+    container.innerHTML = '';
+    items.forEach(item => {
+        const div = document.createElement('div');
+        div.classList.add('item');
+        div.innerHTML = `
+            <h3>${item.name} (${item.type})</h3>
+            <p><strong>속성:</strong> ${item.attributes.join(', ')}</p>
+            <p><strong>등급:</strong> ${item.grade}</p>
+            <p><strong>능력:</strong> ${item.ability}</p>
+            ${item.extra ? `<p><strong>부가능력:</strong> ${item.extra}</p>` : ''}
+        `;
+        container.appendChild(div);
+    });
+}
+
+// 아이템 필터링 함수
+function filterItems() {
+    let filteredItems = items;
+
+    // 속성 필터
+    if (selectedAttributes.length > 0) {
+        filteredItems = filteredItems.filter(item => {
+            return selectedAttributes.some(attr => item.attributes.includes(attr));
+        });
+    }
+
+    // 등급 필터
+    if (selectedGrades.length > 0) {
+        filteredItems = filteredItems.filter(item => selectedGrades.includes(item.grade));
+    }
+
+    // 종류 필터
+    if (selectedTypes.length > 0) {
+        filteredItems = filteredItems.filter(item => selectedTypes.includes(item.type));
+    }
+
+    // 키워드 필터
+    if (selectedKeywords.length > 0) {
+        filteredItems = filteredItems.filter(item => {
+            return selectedKeywords.some(keyword => item.ability.includes(keyword) || (item.extra && item.extra.includes(keyword)));
+        });
+    }
+
+    // 매칭 속성 수에 따라 정렬
+    if (selectedAttributes.length > 1) {
+        filteredItems.sort((a, b) => {
+            const aMatchCount = a.attributes.filter(attr => selectedAttributes.includes(attr)).length;
+            const bMatchCount = b.attributes.filter(attr => selectedAttributes.includes(attr)).length;
+            return bMatchCount - aMatchCount;
+        });
+    }
+
+    renderItems(filteredItems);
+}
+
+// 초기화 함수
+function init() {
+    createFilterButtons(attributes, 'attribute-filters', selectedAttributes, 'attribute');
+    createFilterButtons(grades, 'grade-filters', selectedGrades, 'grade');
+    createFilterButtons(['코어', '아티팩트'], 'type-filters', selectedTypes, 'type');
+    createFilterButtons(keywords, 'keyword-filters', selectedKeywords, 'keyword');
+
+    // 모든 아이템 렌더링
+    renderItems(items);
+}
+
+// 페이지 로드 시 초기화
+init();
+</script>
+
+</body>
+</html>
