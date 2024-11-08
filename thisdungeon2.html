@@ -8,6 +8,25 @@
         font-family: Arial, sans-serif;
         margin: 20px;
     }
+	/* 시너지 섹션 스타일 */
+    .synergy-section {
+        margin-bottom: 30px;
+    }
+    .synergy-section h2 {
+        margin-bottom: 10px;
+        color: #333;
+    }
+    .synergy-section ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .synergy-section li {
+        margin-bottom: 5px;
+        line-height: 1.5;
+    }
+    .synergy-section li strong {
+        color: #4285F4;
+    }
     .filter-section {
         margin-bottom: 20px;
     }
@@ -43,11 +62,65 @@
     .hidden {
         display: none;
     }
+	
+	/* 등급별 색상 클래스 */
+    .grade-희귀 { color: #1E90FF; /* 파란색 */ }
+    .grade-영웅 { color: #800080; /* 보라색 */ }
+    .grade-전설 { color: #FFA500; /* 주황색 */ }
+    .grade-신화 { color: #00FA9A; /* 하늘초록색 */ }
+    .grade-저주 { color: #FF0000; /* 빨간색 */ }
+
+    /* 종류별 색상 클래스 */
+    .type-코어 { color: #FF4500; /* 오렌지 레드 */ }
+    .type-아티팩트 { color: #32CD32; /* 라임 그린 */ }
+	
+	/* 키워드별 색상 클래스 */
+    .attack-power { color: #FF4500; /* 주황색 */ }
+    .spell-power { color: #1E90FF; /* 파란색 */ }
+    .defense { color: #32CD32; /* 녹색 */ }
+    .health { color: #8A2BE2; /* 보라색 */ }
+    .shield { color: #00CED1; /* 다크 틸리 */ }
+    .mana { color: #40E0D0; /* 터키석색 */ }
+    .attack-speed { color: #FFA500; /* 주황색 */ }
+    .damage { color: #DC143C; /* 진홍색 */ }
+    .skill-damage { color: #FF6347; /* 토마토색 */ }
+    .soul-power { color: #BA55D3; /* 중간 보라색 */ }
+    .soul-regeneration { color: #9370DB; /* 중간 보라색 */ }
+    .range { color: #696969; /* 다크 그레이 */ }
+    .recovery { color: #32CD32; /* 녹색 */ }
+    .cooldown { color: #FF69B4; /* 핑크색 */ }
+    .gold { color: #FFD700; /* 금색 */ }
+    .invincibility { color: #FF0000; /* 빨간색 */ }
+    .shield-regeneration { color: #00CED1; /* 다크 틸리 */ }
+    .mana-regeneration { color: #40E0D0; /* 터키석색 */ }
 </style>
 </head>
 <body>
 
 <h1><a href="https://cafe.naver.com/edac/132880" target="_blank">이빌던 DB</a></h1>
+
+<!-- 시너지 설명 -->
+<div class="synergy-section">
+    <h2>시너지 설명</h2>
+    <ul>
+        <li><strong>화염:</strong> 2시너지 <span class="attack-power">공격력+4</span>, 4시너지 <span class="damage">총 피해량+25%</span>, 5시너지 <span class="attack-power">공격력+200%</span></li>
+        <li><strong>냉기:</strong> 2시너지 <span class="spell-power">주문력+4</span>, 4시너지 <span class="skill-damage">스킬피해량+30%</span>, 5시너지 <span class="spell-power">주문력+200%</span></li>
+        <li><strong>바람:</strong> 2시너지 <span class="attack-speed">공격속도+30</span>, 4시너지 <span class="cooldown">쿨타임감소+30%</span>, 5시너지 <span class="attack-speed">공격속도+50</span>, <span class="damage">공격속도만큼 피해량 증가</span></li>
+        <li><strong>대지:</strong> 2시너지 <span class="health">체력+100</span>, 4시너지 <span class="defense">체력의 1%만큼 방어력 증가 (최대50)</span>, 5시너지 <span class="health">체력+200%</span></li>
+        <li><strong>강철:</strong> 2시너지 <span class="defense">방어력+6</span>, 4시너지 <span class="defense">방어력+30%</span>, 5시너지 <span class="damage">방어력의 2배만큼 피해량 증가</span></li>
+        <li><strong>번개:</strong> 2시너지 <span class="mana-regeneration">마나재생+2</span>, 4시너지 <span class="mana">마나+300</span> <span class="mana-regeneration">마나재생+4</span>, 5시너지 <span class="damage">마나의50%만큼 피해량 증가</span></li>
+        <li><strong>어둠:</strong> 2시너지 <span class="damage">총 피해량+10%</span>, 4시너지 <span class="attack-power">공격력&주문력+25%</span>, 5시너지 <span class="damage">총 피해량+150%</span></li>
+        <li><strong>광휘:</strong> 2시너지 <span class="shield">실드+100</span>, 4시너지 <span class="shield-regeneration">실드재생+25</span> <span class="shield">실드+300</span>, 5시너지 <span class="damage">실드의 25%만큼 피해량 증가</span></li>
+        <li><strong>제국:</strong> 2시너지 <span class="health">체력+100</span>, 3시너지 <span class="attack-power">공격력+20%</span>, 4시너지 <span class="attack-power">공격력+50%</span> <span class="health">체력+300</span></li>
+        <li><strong>정령:</strong> 2시너지 <span class="shield">실드+50</span>, 3시너지 <span class="spell-power">주문력+20%</span>, 4시너지 <span class="spell-power">주문력+50</span> <span class="shield">실드+200</span></li>
+        <li><strong>이계:</strong> 2시너지 <span class="mana">마나+200</span>, 3시너지 <span class="defense">방어력+25%</span>, 4시너지 <span class="mana-regeneration">마나재생 1당 15%만큼 총 피해량 증가</span></li>
+        <li><strong>마물:</strong> 2시너지 <span class="health">체력+100</span>, 3시너지 <span class="defense">방어력+25%</span>, 4시너지 <span class="soul-power">신수의 능력치 300% 증가</span></li>
+        <li><strong>망자:</strong> 2시너지 <span class="soul-power">영혼력+100</span> <span class="soul-regeneration">영혼재생+9</span>, 3시너지 <span class="soul-power">신수 체력+200%</span>, 4시너지 <span class="damage">영혼력의 25%만큼 피해량 증가</span></li>
+        <li><strong>기계:</strong> 2시너지 <span class="attack-speed">공격속도+20</span> <span class="range">사거리+2</span>, 3시너지 <span class="attack-power">평타피해량+40%</span>, 4시너지 <span class="attack-power">평타피해량+200%</span></li>
+        <li><strong>악마:</strong> 2시너지 <span class="cooldown">쿨타임감소+20%</span>, 3시너지 <span class="skill-damage">스킬피해량+30%</span>, 4시너지 <span class="damage">물리피해 주는 악마 소환</span></li>
+        <li><strong>천사:</strong> 2시너지 <span class="mana-regeneration">마나재생+3</span>, 3시너지 <span class="damage">총 피해량+25%</span>, 4시너지 <span class="damage">마법피해 주는 천사 소환</span></li>
+    </ul>
+</div>
 
 <!-- 속성 필터 -->
 <div class="filter-section">
@@ -953,12 +1026,48 @@ function renderItems(items) {
     const container = document.getElementById('item-list');
     container.innerHTML = '';
     items.forEach(item => {
+        // 등급 클래스
+        let gradeClass = '';
+        switch(item.grade) {
+            case '희귀':
+                gradeClass = 'grade-희귀';
+                break;
+            case '영웅':
+                gradeClass = 'grade-영웅';
+                break;
+            case '전설':
+                gradeClass = 'grade-전설';
+                break;
+            case '신화':
+                gradeClass = 'grade-신화';
+                break;
+            case '저주':
+                gradeClass = 'grade-저주';
+                break;
+            default:
+                gradeClass = '';
+        }
+
+        // 종류 클래스
+        let typeClass = '';
+        switch(item.type) {
+            case '코어':
+                typeClass = 'type-코어';
+                break;
+            case '아티팩트':
+                typeClass = 'type-아티팩트';
+                break;
+            default:
+                typeClass = '';
+        }
+
         const div = document.createElement('div');
         div.classList.add('item');
+
         div.innerHTML = `
-            <h3>${item.name} (${item.type})</h3>
+            <h3 class="${typeClass}">${item.name} (${item.type})</h3>
             <p><strong>속성:</strong> ${item.attributes.join(', ')}</p>
-            <p><strong>등급:</strong> ${item.grade}</p>
+            <p><strong>등급:</strong> <b><span class="${gradeClass}">${item.grade}</span></b></p>
             <p><strong>능력:</strong> ${item.ability}</p>
             ${item.extra ? `<p><strong>부가능력:</strong> ${item.extra}</p>` : ''}
         `;
